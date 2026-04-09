@@ -1,0 +1,41 @@
+# Временные файлы и бекапы редакторов
+*~
+*.swp
+*.swo
+*.bak
+.micro/backups/
+
+# Кеш системы и утилит
+.cache/
+__pycache__/
+.npm/
+
+# История оболочек и команд (если случайно скопированы целиком)
+.bash_history
+.zsh_history
+.python_history
+fish_history
+.lesshst
+
+# Секретные данные (критически важно не закоммитить)
+.ssh/id_*
+.gnupg/
+.aws/
+.git-credentials
+.env
+*.pem
+*.key
+*.token
+
+# Специфичное для ОС
+.DS_Store
+Thumbs.db
+
+# Данные состояния приложений
+.local/share/
+!.local/share/fonts/
+!.local/share/icons/
+
+# Исключения (раскомментируй, если нужно добавить конкретный файл из запрещенных директорий)
+# !.ssh/config
+# !.local/share/applications/

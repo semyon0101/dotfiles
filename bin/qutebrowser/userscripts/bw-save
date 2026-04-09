@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Извлекаем чистый домен
+DOMAIN=$(echo "$QUTE_URL" | awk -F[/:] '{print $4}' | rev | cut -d. -f1,2 | rev)
+
+# Запрашиваем логин через Rofi
+USERNAME=$(echo "" | rofi -dmenu -p "Логин для $DOMAIN:")
+[ -z "$USERNAME" ] && exit 0
+
+# Запрашиваем пароль
+PASSWORD=$(echo "" | rofi -dmenu -password -p "Пароль:")
+[ -z "$PASSWORD" ] && exit 0
+
+# Сохраняем в Bitwarden вместе с полным URL текущей страницы
+echo "$PASSWORD" | rbw add --uri "$QUTE_URL" "$DOMAIN" "$USERNAME"
+
+# Уведомление в qutebrowser
+echo "message-info 'Успешно сохранено: $DOMAIN ($USERNAME)'" >> "$QUTE_FIFO"

@@ -1,0 +1,45 @@
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            options "grp:win_space_toggle"
+        }
+        track-layout "global"
+        numlock
+        
+        // Время в миллисекундах, которое нужно удерживать клавишу
+        // до того, как она начнет повторяться (по умолчанию обычно 600)
+        repeat-delay 400
+
+        // Количество повторений символа в секунду (по умолчанию обычно 25)
+        repeat-rate 25
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+
+        // Умножает скорость скролла. 
+        // 1.5 сделает его на 50% быстрее, 2.0 — в два раза быстрее.
+        scroll-factor 2
+        
+        accel-speed 1
+        
+        // Профиль ускорения. Для тачпада лучше оставить адаптивный
+        accel-profile "flat"
+    }
+
+    mouse {
+        // off
+    }
+
+    trackpoint {
+        // off
+    }
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}

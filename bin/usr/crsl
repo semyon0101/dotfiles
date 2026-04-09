@@ -1,0 +1,129 @@
+#!/bin/bash
+# create simlinks
+# Default directories (can be overridden with -s and -t)
+SOURCE_DIR="$PWD"
+TARGET_DIR="$HOME"
+
+ACTION=""
+FORCE=0
+FILES_TO_LINK=()
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -S) 
+            ACTION="link"
+            shift 
+            ;;
+        -R) 
+            ACTION="remove"
+            shift 
+            ;;
+        -f) 
+            FORCE=1
+            shift 
+            ;;
+        -s) 
+            if [[ -z "$2" || "$2" == -* ]]; then
+                echo "Error: -s requires a directory path."
+                exit 1
+            fi
+            SOURCE_DIR="$2"
+            shift 2 
+            ;;
+        -t) 
+            if [[ -z "$2" || "$2" == -* ]]; then
+                echo "Error: -t requires a directory path."
+                exit 1
+            fi
+            TARGET_DIR="$2"
+            shift 2 
+            ;;
+	-h)
+	    echo "crsl [ options ] package"
+	    echo "-S make simlinks in directory"
+	    echo "-R remove simlilnks in directory"
+	    echo "-f force"
+	    echo "-s source directory"
+	    echo "-t target direcotry"
+	    exit 0
+	    ;;
+        -*) 
+            echo "Unknown flag: $1"
+            exit 1 
+            ;;
+        *) 
+            FILES_TO_LINK+=("$1")
+            shift 
+            ;;
+    esac
+done
+
+# Validate inputs
+if [[ -z "$ACTION" ]]; then
+    echo "Error: No action specified. Use -S (link) or -R (remove)."
+    exit 1
+fi
+
+if [[ ${#FILES_TO_LINK[@]} -eq 0 ]]; then
+    echo "Error: No files specified. Provide at least one file name."
+    exit 1
+fi
+
+# Convert to absolute paths
+SOURCE_DIR=$(realpath -m "$SOURCE_DIR")
+TARGET_DIR=$(realpath -m "$TARGET_DIR")
+
+# Process each file
+for file_name in "${FILES_TO_LINK[@]}"; do
+    SRC_FILE="$SOURCE_DIR/$file_name"
+    TGT_FILE="$TARGET_DIR/$file_name"
+
+    if [[ "$ACTION" == "link" ]]; then
+        # Check if source file exists
+        if [[ ! -e "$SRC_FILE" ]]; then
+            echo "[-] Skipping '$file_name': Source file '$SRC_FILE' does not exist."
+            continue
+        fi
+        
+        # Create parent directory for target if it doesn't exist
+        mkdir -p "$(dirname "$TGT_FILE")"
+        
+        # Handle conflicts in target directory
+        if [[ -e "$TGT_FILE" || -L "$TGT_FILE" ]]; then
+            if [[ $FORCE -eq 1 ]]; then
+                echo "[*] Force overwriting: $TGT_FILE"
+                rm -rf "$TGT_FILE"
+            else
+                echo "[-] Skipping '$file_name': '$TGT_FILE' already exists. Use -f to overwrite."
+                continue
+            fi
+        fi
+        
+        ln -s "$SRC_FILE" "$TGT_FILE"
+        echo "[+] Symlinked: $TGT_FILE -> $SRC_FILE"
+
+    elif [[ "$ACTION" == "remove" ]]; then
+        # If it is a symlink, remove it immediately without checking its destination
+        if [[ -L "$TGT_FILE" ]]; then
+            rm "$TGT_FILE"
+            echo "[+] Removed symlink: $TGT_FILE"
+            
+        # If it's not a symlink but it exists (e.g., a regular file or directory)
+        elif [[ -e "$TGT_FILE" ]]; then
+            if [[ $FORCE -eq 1 ]]; then
+                # Force remove without checking if it's a symlink
+                rm -rf "$TGT_FILE"
+                echo "[*] Force removed existing file/directory: $TGT_FILE"
+            else
+                echo "[-] Skipping '$file_name': '$TGT_FILE' is not a symlink. Use -f to force removal."
+            fi
+            
+        # If it doesn't exist at all
+        else
+            if [[ $FORCE -eq 0 ]]; then
+                echo "[-] Skipping '$file_name': '$TGT_FILE' does not exist."
+            fi
+        fi
+    fi
+done

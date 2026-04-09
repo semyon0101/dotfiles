@@ -1,0 +1,10 @@
+// spawn-at-startup "waybar"
+spawn-at-startup "wallpaper-loading-screen.sh"
+
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+
+spawn-at-startup "systemctl" "--user" "start" "niri.service"
+
+spawn-at-startup "swayidle" "-w"
+
+spawn-at-startup "usr/local/bin/rbw-unlock.sh"

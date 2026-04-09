@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Извлекаем чистый домен из URL
+DOMAIN=$(echo "$QUTE_URL" | awk -F[/:] '{print $4}' | rev | cut -d. -f1,2 | rev)
+
+# 1. Получаем все записи в формате "Имя | Юзернейм" (rbw list отдает их через табуляцию)
+# 2. Передаем в rofi. Флаг -filter "$DOMAIN" автоматически впишет домен в строку поиска
+SELECTED=$(rbw list --fields name,user | sed 's/\t/ | /' | rofi -dmenu -i -filter "$DOMAIN" -p "Выбор аккаунта:")
+# Если закрыли rofi (нажали Esc)
+[ -z "$SELECTED" ] && exit 0
+
+# Разделяем выбранную строку обратно на Имя и Логин
+NAME=$(echo "$SELECTED" | awk -F' \\| ' '{print $1}')
+USERNAME=$(echo "$SELECTED" | awk -F' \\| ' '{print $2}')
+
+
+ACTION=$(echo -e "1)Логин + Пароль\n2)Только Логин\n3)Только Пароль" | rofi -dmenu -i -p "Что вставить?:")
+[ -z "$ACTION" ] && exit 0
+
+# Получаем пароль
+if [ -n "$USERNAME" ]; then
+    PASSWORD=$(rbw get "$NAME" "$USERNAME")
+else
+    PASSWORD=$(rbw get "$NAME")
+fi
+
+# 3. Отправляем нужную последовательность клавиш в qutebrowser
+if [[ "$ACTION" == "1)Логин + Пароль" ]]; then
+    # Классический вариант: логин, таб, пароль, энтер
+    echo "fake-key $USERNAME<Tab>$PASSWORD" >> "$QUTE_FIFO"
+
+elif [[ "$ACTION" == "2)Только Логин" ]]; then
+    # Для первой страницы Google: только логин и энтер
+    echo "fake-key $USERNAME" >> "$QUTE_FIFO"
+
+elif [[ "$ACTION" == "3)Только Пароль" ]]; then
+    # Для второй страницы Google: только пароль и энтер
+    echo "fake-key $PASSWORD" >> "$QUTE_FIFO"
+fi

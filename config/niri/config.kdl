@@ -1,0 +1,23 @@
+// Глобальные настройки
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+hotkey-overlay {
+    // skip-at-startup
+}
+
+animations {
+    // off
+    // slowdown 3.0
+}
+
+prefer-no-csd
+
+// --- Подключение модулей ---
+
+include "autostart.kdl"
+include "input.kdl"
+include "outputs.kdl"
+include "layout.kdl"
+include "windowrules.kdl"
+include "binds.kdl"
+include "dms/cursor.kdl"

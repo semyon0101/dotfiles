@@ -1,0 +1,12 @@
+# ~/.config/swayidle/config
+
+# 1. Что делать перед сном (закрытие крышки ноутбука)
+before-sleep 'swaylock -f'
+
+# 2. Блокировка экрана через 5 минут (300 секунд) бездействия
+timeout 600 'swaylock -f'
+
+# 3. Отключение питания дисплея еще через 1 минуту (360 секунд)
+# Когда вы пошевелите мышью, сработает команда 'resume' и экран включится
+timeout 660 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors'
+timeout 900 'systemctl suspend'
