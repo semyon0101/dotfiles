@@ -6,14 +6,7 @@
 
 config_version: 2
 settings:
-  content.cookies.accept:
-    global: no-3rdparty
-  content.headers.referer:
-    global: same-domain
-  content.headers.user_agent:
-    '*://*.youtube.com/*': Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
-      (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36
-  qt.args:
-    global:
-    - enable-features=dns-over-https
-    - dns-over-https-templates=https://dns.adguard-dns.com/dns-query
+  colors.webpage.darkmode.enabled:
+    global: false
+  content.notifications.enabled:
+    https://edu.tbank.ru: false

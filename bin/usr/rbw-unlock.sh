@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Сюда вписываешь свой мастер-пароль
-PASSWORD="$(cat ../../.env/bitwarden.key)"
+PASSWORD="$(cat /projects/dotfiles/.env/bitwarden.key)"
 
 # 1. Прибиваем зависшего агента на всякий случай
 rbw stop-agent 2>/dev/null
