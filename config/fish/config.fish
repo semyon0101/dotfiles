@@ -1,6 +1,6 @@
 if status is-interactive
 # 1. Clear the default greeting
-set -U fish_greeting ""
+set -g fish_greeting "" # -U
 
 # Автозапуск Niri при логине на TTY1
 if status is-login
@@ -45,7 +45,8 @@ alias ls="eza --icons --group-directories-first"
 alias ll="eza --icons --group-directories-first --long --header --git --all --all"
 alias tree="eza --icons --tree"
 alias cat="bat"
-export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
+
+set -gx DEBUGINFOD_URLS "https://debuginfod.archlinux.org"
 
 
 # == Pager Colors (Tab Completion Menu) ==
