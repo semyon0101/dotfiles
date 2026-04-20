@@ -3,19 +3,19 @@ return {
   event = "VeryLazy",
   opts = {
     -- Настройки внешнего вида (под твой прозрачный стиль)
-    preset = "classic", -- или "modern" / "helix"
+    preset = "classic",   -- или "modern" / "helix"
     win = {
       border = "rounded", -- Красивые скругленные края
       padding = { 1, 2 }, -- Внутренние отступы
       wo = {
-        winblend = 0, -- 0 для полной прозрачности (если настроено в теме)
+        winblend = 0,     -- 0 для полной прозрачности (если настроено в теме)
       },
     },
     delay = 1000,
     layout = {
       align = "center", -- Выравнивание текста
     },
-    
+
   },
   keys = {
     {
@@ -29,7 +29,7 @@ return {
   config = function(_, opts)
     local wk = require("which-key")
     wk.setup(opts)
-    
+
     -- Группируем наши бинды, чтобы они красиво назывались в меню
     wk.add({
       { "<leader>n", group = "Noice" },

@@ -32,8 +32,8 @@ c.url.searchengines = {
 c.editor.command = ['kitty', '-e', 'nvim', '{file}']
 
 
-config.set('colors.webpage.darkmode.enabled', False, 'https://*.google.com/*')
-c.colors.webpage.darkmode.enabled = True
+#config.set('colors.webpage.darkmode.enabled', False, 'https://*.google.com/*')
+#c.colors.webpage.darkmode.enabled = True
 c.colors.webpage.preferred_color_scheme = 'dark'
 
 # Enable smooth scrolling
@@ -65,7 +65,7 @@ os.environ["QT_QPA_PLATFORM"] = "wayland"
 
 c.content.webgl = True 
 c.content.canvas_reading = True
-c.content.autoplay = False
+c.content.autoplay = True 
 
 c.content.javascript.clipboard= "access" # не совсем про это, но полезно
 c.input.insert_mode.auto_load = False

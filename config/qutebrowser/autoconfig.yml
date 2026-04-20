@@ -8,5 +8,7 @@ config_version: 2
 settings:
   colors.webpage.darkmode.enabled:
     global: false
-  content.notifications.enabled:
-    https://edu.tbank.ru: false
+  content.autoplay:
+    global: true
+  session.lazy_restore:
+    global: true

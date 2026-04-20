@@ -16,17 +16,37 @@ return {
     local cmp = require("cmp")
     local luasnip = require("luasnip")
 
+    local my_keymaps = require("core.keymaps")
+
     -- Загружаем готовые сниппеты (например, пишешь "for" -> разворачивается в цикл)
     require("luasnip.loaders.from_vscode").lazy_load()
 
     -- Иконки для меню автодополнения
     local kind_icons = {
-      Text = "󰉿", Method = "󰆧", Function = "󰊕", Constructor = "",
-      Field = "󰜢", Variable = "󰀫", Class = "󰠱", Interface = "",
-      Module = "", Property = "󰜢", Unit = "󰑭", Value = "󰎠",
-      Enum = "", Keyword = "󰌋", Snippet = "", Color = "󰏘",
-      File = "󰈙", Reference = "󰈇", Folder = "󰉋", EnumMember = "",
-      Constant = "󰏿", Struct = "󰙅", Event = "", Operator = "󰆕",
+      Text = "󰉿",
+      Method = "󰆧",
+      Function = "󰊕",
+      Constructor = "",
+      Field = "󰜢",
+      Variable = "󰀫",
+      Class = "󰠱",
+      Interface = "",
+      Module = "",
+      Property = "󰜢",
+      Unit = "󰑭",
+      Value = "󰎠",
+      Enum = "",
+      Keyword = "󰌋",
+      Snippet = "",
+      Color = "󰏘",
+      File = "󰈙",
+      Reference = "󰈇",
+      Folder = "󰉋",
+      EnumMember = "",
+      Constant = "󰏿",
+      Struct = "󰙅",
+      Event = "",
+      Operator = "󰆕",
       TypeParameter = "󰅲",
     }
 
@@ -38,16 +58,8 @@ return {
         end,
       },
       -- Горячие клавиши для управления меню
-      mapping = cmp.mapping.preset.insert({
-        ["<C-k>"] = cmp.mapping.select_prev_item(), -- Предыдущая подсказка (Ctrl+k)
-        ["<C-j>"] = cmp.mapping.select_next_item(), -- Следующая подсказка (Ctrl+j)
-        ["<C-b>"] = cmp.mapping.scroll_docs(-4),    -- Пролистать документацию вверх
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),     -- Пролистать документацию вниз
-        ["<C-Space>"] = cmp.mapping.complete(),     -- Вызвать меню принудительно
-        ["<C-e>"] = cmp.mapping.abort(),            -- Закрыть меню
-        ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Подтвердить выбор (Enter)
-      }),
-      -- Настройка внешнего вида меню
+      mapping = cmp.mapping.preset.insert(my_keymaps.get_cmp_mappings(cmp)),
+
       formatting = {
         format = function(entry, vim_item)
           -- Добавляем иконки
@@ -64,14 +76,30 @@ return {
       },
       -- Порядок источников (кто важнее)
       sources = cmp.config.sources({
-        { name = "nvim_lsp" }, -- Подсказки от серверов (C, Go, Bash) важнее всего
-        { name = "luasnip" },  -- Затем сниппеты
+        {
+          name = "nvim_lsp",
+
+          entry_filter = function(entry, _)
+            return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+          end
+        },                    -- Подсказки от серверов (C, Go, Bash) важнее всего
+        { name = "luasnip" }, -- Затем сниппеты
       }, {
-        { name = "path" },     -- И пути к файлам
+        { name = "path" },    -- И пути к файлам
       }, {
-        { name = "buffer" },   -- Если ничего нет, предлагаем просто слова из файла
+        { name = "buffer" },  -- Если ничего нет, предлагаем просто слова из файла
+      }),
+      window = {
+        -- Настройки для списка вариантов
+        completion = cmp.config.window.bordered({
+          -- Принудительно используем группу Pmenu (плотный фон) вместо прозрачного Normal
+          winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+        }),
+        -- Настройки для окна документации (как на твоем скриншоте)
+        documentation = cmp.config.window.bordered({
+          winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+        }),
       }
-    ),
     })
   end,
 }
