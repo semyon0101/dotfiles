@@ -1,5 +1,105 @@
 vim.g.mapleader = " "
 
+local function escape(str)
+  local escape_chars = [[;,."|\]]
+  return vim.fn.escape(str, escape_chars)
+end
+
+local en_shift = [[~QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>]]
+local ru_shift = [[ËЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ]]
+local en = [[`qwertyuiop[]asdfghjkl;'zxcvbnm]]
+local ru = [[ёйцукенгшщзхъфывапролджэячсмить]]
+local en_full = [[~QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>?`qwertyuiop[]asdfghjkl;'zxcvbnm,./]]
+local ru_full = [[ËЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,ёйцукенгшщзхъфывапролджэячсмитьбю.]]
+
+-- 1. Настройка встроенного langmap (для d, y, w, f и т.д.)
+vim.opt.langmap = vim.fn.join({
+  escape(ru_shift) .. ';' .. escape(en_shift),
+  escape(ru) .. ';' .. escape(en),
+}, ',')
+
+-- 2. Перевод комбинаций Ctrl+ через встроенный nvim_feedkeys
+local function map_translated_ctrls()
+  local en_list = vim.split(en_full:gsub('%u', ''), '')
+  local modes = { 'n', 'o', 'i', 'c', 't', 'v' }
+  for _, char in ipairs(en_list) do
+    local keycode = '<C-' .. char .. '>'
+    local tr_char = vim.fn.tr(char, en_full, ru_full)
+    local tr_keycode = '<C-' .. tr_char .. '>'
+    if not en_full:find(tr_char, 1, true) then
+      local term_keycodes = vim.api.nvim_replace_termcodes(keycode, true, true, true)
+      vim.keymap.set(modes, tr_keycode, function()
+        vim.api.nvim_feedkeys(term_keycodes, 'm', true)
+      end, {desc = "which_key_ignore"})
+    end
+  end
+end
+map_translated_ctrls()
+
+-- 3. Функция разбора и перевода сложных комбинаций 
+local function translate_keycode(lhs)
+  if type(lhs) ~= "string" then return lhs end
+  local res, i = "", 1
+  while i <= #lhs do
+    local c = lhs:sub(i, i)
+    if c == "<" then
+      local e = lhs:find(">", i)
+      if e then
+        local inside = lhs:sub(i + 1, e - 1)
+        if inside:match("^%a%-") then
+          local dash = inside:match("^.*%-()")
+          local pref = inside:sub(1, dash - 1)
+          local key = inside:sub(dash)
+          local tr_key = #key == 1 and vim.fn.tr(key, en_full, ru_full) or key
+          res = res .. "<" .. pref .. tr_key .. ">"
+        else
+          res = res .. "<" .. inside .. ">"
+        end
+        i = e + 1
+      else
+        res = res .. vim.fn.tr(c, en_full, ru_full)
+        i = i + 1
+      end
+    else
+      res = res .. vim.fn.tr(c, en_full, ru_full)
+      i = i + 1
+    end
+  end
+  return res
+end
+
+-- 4. Перехват API Neovim для глобальных и локальных маппингов (вкл. плагины)
+local disable_modes = { 'i', 'c', 't' }
+
+local original_set_keymap = vim.api.nvim_set_keymap
+---@diagnostic disable-next-line: duplicate-set-field
+vim.api.nvim_set_keymap = function(mode, lhs, rhs, opts)
+  original_set_keymap(mode, lhs, rhs, opts)
+  if not vim.tbl_contains(disable_modes, mode) then
+    local tr_lhs = translate_keycode(lhs)
+    if tr_lhs ~= lhs then
+      local tr_opts = vim.tbl_extend("force", {}, opts or {})
+      tr_opts.desc = "which_key_ignore"
+      original_set_keymap(mode, tr_lhs, rhs, tr_opts)
+    end
+  end
+end
+
+local original_buf_set_keymap = vim.api.nvim_buf_set_keymap
+---@diagnostic disable-next-line: duplicate-set-field
+vim.api.nvim_buf_set_keymap = function(bufnr, mode, lhs, rhs, opts)
+  original_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+  if not vim.tbl_contains(disable_modes, mode) then
+    local tr_lhs = translate_keycode(lhs)
+    if tr_lhs ~= lhs then
+      local tr_opts = vim.tbl_extend("force", {}, opts or {})
+      tr_opts.desc = "which_key_ignore"
+      original_buf_set_keymap(bufnr, mode, tr_lhs, rhs, tr_opts)
+    end
+  end
+end
+
+
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP hotkeys',
   callback = function(event)
@@ -110,6 +210,8 @@ vim.keymap.set("n", "<leader>va", function()
   -- Экран прыгнет к началу файла, что обычно удобнее, чем смотреть на пустые строки в конце.
   vim.cmd("normal! o")
 end, { desc = "Select all file" })
+
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = "Exit terminal mode" })
 
 -- For cmp binds
 local M = {}

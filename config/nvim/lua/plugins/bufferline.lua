@@ -50,6 +50,12 @@ return {
         background = { fg = "#787c99", bg = "#24283b" },
         buffer_visible = { fg = "#787c99", bg = "#24283b" },
 
+        duplicate_selected = { fg = "#7aa2f7", bg = "#3b4261" },
+        duplicate_visible = { fg = "#787c99", bg = "#24283b" },
+        duplicate = { bg = "#24283b" },
+        trunc_marker = { bg = "#1a1b26" },
+
+
         -- Активная вкладка (еще светлее, чтобы выделяться)
         buffer_selected = { fg = "#7aa2f7", bg = "#3b4261", bold = true, italic = false },
 
@@ -99,7 +105,8 @@ return {
         hint_selected = { fg = "#1abc9c", bg = "#3b4261", bold = true },
         hint_diagnostic = { fg = "#1abc9c", bg = "#24283b" },
         hint_diagnostic_visible = { fg = "#1abc9c", bg = "#24283b" },
-        hint_diagnostic_selected = { fg = "#1abc9c", bg = "#3b4261" },      }
+        hint_diagnostic_selected = { fg = "#1abc9c", bg = "#3b4261" },
+      }
     })
     -- Задаем базовый цвет при запуске (неактивный)
     vim.api.nvim_set_hl(0, "NvimTreeTabHighlight", { bg = "#1a1b26", fg = "#787c99", bold = false })

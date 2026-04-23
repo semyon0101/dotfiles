@@ -21,6 +21,14 @@ return {
       },
     })
 
+    vim.diagnostic.config({
+      update_in_insert = false,
+      float = {
+        border = "rounded",
+        winhighlight = "FloatBorder:PmenuBorder",
+      },
+    })
+
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     vim.lsp.config("pyright", { capabilities = capabilities })
@@ -43,13 +51,7 @@ return {
         },
       },
     })
+
     vim.lsp.enable("lua_ls")
-    vim.diagnostic.config({
-      update_in_insert = false,
-      float = {
-        border = "rounded",
-        winhighlight = "FloatBorder:PmenuBorder",
-      },
-    })
   end,
 }

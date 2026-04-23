@@ -41,8 +41,15 @@ return {
         -- 'cmdline_popup' - модное окно по центру экрана
         view = "cmdline",
       },
+
       notify = {
         enabled = true,
+      },
+
+      lsp = {
+        progress = {
+          enabled = false,
+        },
       },
 
       presets = {
@@ -60,6 +67,17 @@ return {
           opts = { skip = true },
         },
       },
+    })
+
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = vim.api.nvim_create_augroup("LspReadyNotify", { clear = true }),
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client then
+          -- Выводим одну строку через стандартный vim.notify (noice ее перехватит и красиво отрисует)
+          vim.notify("LSP: " .. client.name .. " is ready", vim.log.levels.INFO, { title = "LSP" })
+        end
+      end,
     })
   end,
 }

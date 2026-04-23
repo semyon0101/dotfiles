@@ -16,5 +16,5 @@ opt.cursorline = true -- Включает подсветку строки, на 
 opt.cmdheight = 0 -- Скрываем командную строку, когда она не используется
 opt.report = 99999
 
-vim.opt.termguicolors = true
-
+opt.termguicolors = true
+opt.signcolumn = "yes"

@@ -22,6 +22,7 @@ return {
       vim.keymap.set("n", "d", api.fs.remove, opts("Delete"))
       vim.keymap.set("n", "i", api.node.show_info_popup, opts("Show info"))
 
+      vim.keymap.set("n", "R", api.tree.change_root_to_node, opts("Change root directory"))
       -- НАСТРОЙКА: Space для открытия файлов и папок
       vim.keymap.set("n", "<CR>", api.node.open.edit, opts("Open"))
     end

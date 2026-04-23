@@ -4,7 +4,7 @@ binds {
     Mod+Return { spawn "kitty"; }
     Ctrl+Alt+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Super+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Super+W hotkey-overlay-title="Open web brauser: qutebrowser" { spawn "qutebrowser"; }
+    Super+W hotkey-overlay-title="Open web brauser: vivaldi" { spawn "vivaldi"; }
 
     // Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
     Mod+A hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun" "-theme" "~/.config/rofi/launchers/type-1/style-7.rasi"; }
