@@ -30,13 +30,13 @@ local function map_translated_ctrls()
       local term_keycodes = vim.api.nvim_replace_termcodes(keycode, true, true, true)
       vim.keymap.set(modes, tr_keycode, function()
         vim.api.nvim_feedkeys(term_keycodes, 'm', true)
-      end, {desc = "which_key_ignore"})
+      end, { desc = "which_key_ignore" })
     end
   end
 end
 map_translated_ctrls()
 
--- 3. Функция разбора и перевода сложных комбинаций 
+-- 3. Функция разбора и перевода сложных комбинаций
 local function translate_keycode(lhs)
   if type(lhs) ~= "string" then return lhs end
   local res, i = "", 1
@@ -129,7 +129,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 vim.keymap.set({ "n", "v" }, "<leader>cl", function()
-  vim.lsp.buf.format({ async = true })
+  vim.lsp.buf.format({
+    async = true,
+    formatting_options = {
+      tabSize = 2,
+      insertSpaces = true,
+    }
+  })
 end, { desc = "Autoformat code" })
 
 vim.keymap.set("n", "<leader>nh", ":Noice history<CR>", { desc = "Noice history" })
@@ -168,6 +174,7 @@ end, { desc = "Buffers" })
 vim.keymap.set('n', '<leader>fh', function()
   require('telescope.builtin').help_tags()
 end, { desc = "Help tags" })
+
 -- Windows
 -- 1. Навигация между окнами (Ctrl + h/j/k/l вместо Ctrl+w -> h/j/k/l)
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to right window" })
@@ -185,13 +192,15 @@ vim.keymap.set("n", "<leader>w", "<cmd>bdelete<cr>", { desc = "Close window" })
 
 
 
+
+
 -- Навигация по вкладкам (буферам)
-vim.keymap.set("n", "J", "<cmd>BufferLineCyclePrev<cr>", { desc = "Previous tab" })
-vim.keymap.set("n", "K", "<cmd>BufferLineCycleNext<cr>", { desc = "Next tab" })
+vim.keymap.set("n", "<A-j>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Previous tab" })
+vim.keymap.set("n", "<A-k>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next tab" })
 
 -- Быстрое перемещение вкладок местами
-vim.keymap.set("n", "gJ", "<cmd>BufferLineMovePrev<cr>", { desc = "Move tab forward" })
-vim.keymap.set("n", "gK", "<cmd>BufferLineMoveNext<cr>", { desc = "Move tab backward" })
+vim.keymap.set("n", "<A-J>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move tab forward" })
+vim.keymap.set("n", "<A-K>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move tab backward" })
 
 vim.keymap.set("n", "<leader>sw", function()
   require("bufdelete").bufdelete(0, true)
@@ -225,8 +234,33 @@ M.get_cmp_mappings = function(cmp)
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.abort(),
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    ["<S-CR>"] = cmp.mapping.confirm({ select = true }),
   }
+end
+
+M.nvim_tree_on_attach = function(bufnr)
+  local api = require("nvim-tree.api")
+
+  local function opts(desc)
+    return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+
+  -- Загружаем стандартные бинды
+  -- api.map.on_attach.default(bufnr)
+
+  vim.keymap.set("n", "o", api.node.open.edit, opts("Open"))
+  vim.keymap.set("n", "c", api.node.navigate.parent_close, opts("Close Directory"))
+  vim.keymap.set("n", "v", api.node.open.vertical, opts("Open: Vertical Split"))
+  vim.keymap.set("n", "h", api.node.open.horizontal, opts("Open: Horizontal Split"))
+  vim.keymap.set("n", "r", api.fs.rename, opts("Rename"))
+  vim.keymap.set("n", "a", api.fs.create, opts("Create"))
+  vim.keymap.set("n", "d", api.fs.remove, opts("Delete"))
+  vim.keymap.set("n", "i", api.node.show_info_popup, opts("Show info"))
+
+  vim.keymap.set("n", "R", api.tree.change_root_to_node, opts("Change root directory"))
+  -- НАСТРОЙКА: Space для открытия файлов и папок
+  vim.keymap.set("n", "<CR>", api.node.open.edit, opts("Open"))
 end
 
 -- Важно: если в твоем keymaps.lua в конце нет return, добавь его,

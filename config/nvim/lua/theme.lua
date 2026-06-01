@@ -30,6 +30,9 @@ return {
 
       hl.NvimTreeFloatBorder = { link = "PmenuBorder" }
 
+      hl.TelescopeResultsTitle = { link = "TelescopeTitle" }
+      hl.TelescopePreviewLine = { bg = "#2f334d" }
+
       -- Также убедись, что само содержимое окна имеет плотный фон
       -- hl.NvimTreeNormalFloat = { link = "PmenuBorder" }
     end,

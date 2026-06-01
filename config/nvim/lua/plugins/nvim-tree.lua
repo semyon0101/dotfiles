@@ -2,33 +2,10 @@ return {
   "nvim-tree/nvim-tree.lua",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
-    -- Функция для кастомных хоткеев внутри дерева
-    local function on_attach(bufnr)
-      local api = require("nvim-tree.api")
-
-      local function opts(desc)
-        return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-      end
-
-      -- Загружаем стандартные бинды
-      -- api.map.on_attach.default(bufnr)
-
-      vim.keymap.set("n", "o", api.node.open.edit, opts("Open"))
-      vim.keymap.set("n", "c", api.node.navigate.parent_close, opts("Close Directory"))
-      vim.keymap.set("n", "v", api.node.open.vertical, opts("Open: Vertical Split"))
-      vim.keymap.set("n", "h", api.node.open.horizontal, opts("Open: Horizontal Split"))
-      vim.keymap.set("n", "r", api.fs.rename, opts("Rename"))
-      vim.keymap.set("n", "a", api.fs.create, opts("Create"))
-      vim.keymap.set("n", "d", api.fs.remove, opts("Delete"))
-      vim.keymap.set("n", "i", api.node.show_info_popup, opts("Show info"))
-
-      vim.keymap.set("n", "R", api.tree.change_root_to_node, opts("Change root directory"))
-      -- НАСТРОЙКА: Space для открытия файлов и папок
-      vim.keymap.set("n", "<CR>", api.node.open.edit, opts("Open"))
-    end
+    local my_keymaps = require("core.keymaps")
 
     require("nvim-tree").setup({
-      on_attach = on_attach, -- Подключаем наши бинды
+      on_attach = my_keymaps.nvim_tree_on_attach, -- Подключаем наши бинды
       view = {
         width = 30,
         side = "left",
@@ -39,9 +16,24 @@ return {
             border = "rounded", -- Вместо "shadow"
           },
         },
+        change_dir = {
+          enable = true,
+          global = true,
+          restrict_above_cwd = false,
+        },
+      },
+      sync_root_with_cwd = true,
+      -- Учитывать cwd текущего буфера (полезно при работе с несколькими проектами)
+      respect_buf_cwd = true,
+
+      update_focused_file = {
+        enable = true,
+        -- Автоматически менять корень nvim-tree, если ты открыл файл (например через LSP goto definition),
+        -- который находится за пределами текущего корня
+        -- update_root = true,
       },
       renderer = {
-        highlight_git = "all",
+        highlight_git = "none",
         indent_markers = { enable = true },
         icons = {
           git_placement = "after", -- В VS Code значки Git стоят ПОСЛЕ имени файла
