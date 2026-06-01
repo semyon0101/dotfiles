@@ -1,21 +1,22 @@
 if status is-interactive
 # 1. Clear the default greeting
 set -g fish_greeting "" # -U
-
+set -gx VISUAL "nvim"
+set -gx EDITOR "nvim"
 # Автозапуск Niri при логине на TTY1
-if status is-login
-    # Проверяем, что мы на первой консоли и графика еще не запущена
-    if test (tty) = "/dev/tty1"
-        # Переменные для корректной работы Wayland
-        set -gx XDG_SESSION_TYPE wayland
-        set -gx XDG_CURRENT_DESKTOP niri
-        
-        # exec wallpaper-loading-screen.sh &
-        # Запуск через dbus-run-session лечит ошибки с шиной данных
-        exec niri-session
-        # sleep 10
-    end
-end
+# if status is-login
+#     # Проверяем, что мы на первой консоли и графика еще не запущена
+#     if test (tty) = "/dev/tty1"
+#         # Переменные для корректной работы Wayland
+#         set -gx XDG_SESSION_TYPE wayland
+#         set -gx XDG_CURRENT_DESKTOP niri
+#         
+#         # exec wallpaper-loading-screen.sh &
+#         # Запуск через dbus-run-session лечит ошибки с шиной данных
+#         exec niri-session
+#         # sleep 10
+#     end
+# end
 
 # 2. Initialize Oh My Posh with a highly visual built-in theme
 # 'amro' and 'paradox' are great out-of-the-box themes with pretty characters

@@ -9,6 +9,11 @@ window-rule {
 }
 
 window-rule {
+  match app-id=r#"org.gnome.Nautilus$"#
+  open-floating true
+}
+
+window-rule {
     match app-id=r#"^kitty$"#
     draw-border-with-background false
 }
@@ -22,6 +27,9 @@ window-rule {
 window-rule {
     geometry-corner-radius 10
     clip-to-geometry true
+    background-effect {
+       blur true
+    }
 }
 
 hotkey-overlay {

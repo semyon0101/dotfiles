@@ -3,9 +3,9 @@
 ignore-empty-password
 # show-failed-attempts
 
-clock
-timestr=%R
-datestr=%a, %e of %B
+#clock
+#timestr=%R
+#datestr=%a, %e of %B
 
 screenshots
 

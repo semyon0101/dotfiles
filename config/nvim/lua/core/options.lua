@@ -13,7 +13,7 @@ opt.ignorecase = true
 opt.smartcase = true
 
 opt.cursorline = true -- Включает подсветку строки, на которой находится курсор
-opt.cmdheight = 0 -- Скрываем командную строку, когда она не используется
+opt.cmdheight = 0     -- Скрываем командную строку, когда она не используется
 opt.report = 99999
 
 opt.termguicolors = true

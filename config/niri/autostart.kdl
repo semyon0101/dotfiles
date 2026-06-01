@@ -5,6 +5,8 @@ spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XD
 
 spawn-at-startup "systemctl" "--user" "start" "niri.service"
 
-spawn-at-startup "swayidle" "-w"
+spawn-at-startup "swayidle" "-w" 
 
 spawn-at-startup "usr/local/bin/rbw-unlock.sh"
+
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
