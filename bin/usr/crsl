@@ -36,8 +36,9 @@ while [[ "$#" -gt 0 ]]; do
                 echo "Error: -t requires a directory path."
                 exit 1
             fi
+	    
             TARGET_DIR="$2"
-            shift 2 
+            shift 2
             ;;
 	-h)
 	    echo "crsl [ options ] package"
@@ -71,13 +72,13 @@ if [[ ${#FILES_TO_LINK[@]} -eq 0 ]]; then
 fi
 
 # Convert to absolute paths
-SOURCE_DIR=$(realpath -m "$SOURCE_DIR")
-TARGET_DIR=$(realpath -m "$TARGET_DIR")
+SOURCE_DIR=$(realpath -ms "$SOURCE_DIR")
+TARGET_DIR=$(realpath -ms "$TARGET_DIR")
 
 # Process each file
 for file_name in "${FILES_TO_LINK[@]}"; do
-    SRC_FILE="$SOURCE_DIR/$file_name"
-    TGT_FILE="$TARGET_DIR/$file_name"
+    SRC_FILE=$(realpath -ms "$SOURCE_DIR/$file_name")
+    TGT_FILE=$(realpath -ms "$TARGET_DIR/$file_name")
 
     if [[ "$ACTION" == "link" ]]; then
         # Check if source file exists
