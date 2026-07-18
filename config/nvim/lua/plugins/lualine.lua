@@ -32,7 +32,7 @@ return {
         lualine_c = { 'filename' },
 
         -- Справа: Кодировка, ОС и тип файла (C, Go, Bash и т.д. с иконкой)
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_x = { 'encoding', 'filetype' },
 
         -- Процент прокрутки
         lualine_y = { 'progress' },

@@ -20,6 +20,8 @@ opt.report = 99999
 opt.termguicolors = true
 opt.signcolumn = "yes"
 
+opt.mousescroll = 'ver:1,hor:3'
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "qml", "qmljs" },
   callback = function()

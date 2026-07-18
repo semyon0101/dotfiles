@@ -19,6 +19,7 @@ return {
         "bashls",
         "ts_ls",   -- JavaScript и TypeScript
         "lua_ls",  -- Lua (для редактирования самого конфига Neovim)
+        "jsonls"
       },
     })
 

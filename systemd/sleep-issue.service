@@ -1,0 +1,40 @@
+[Unit]
+Description=Solving the issue with lags after sleep and restoring sing-box
+DefaultDependencies=no
+Before=sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStart=/bin/bash -c ' \
+    powerprofilesctl get > /run/power_profile.state; \
+    powerprofilesctl set performance; \
+    if systemctl is-active --quiet sing-box.service; then \
+        echo 1 > /run/singbox.state; \
+        systemctl stop sing-box.service; \
+    else \
+        echo 0 > /run/singbox.state; \
+    fi; \
+    cat /run/power_profile.state; \
+    cat /run/singbox.state; \
+    powerprofilesctl get; \
+    sleep 2'
+
+ExecStop=/bin/bash -c ' \
+    cat /run/power_profile.state; \
+    cat /run/singbox.state; \
+    powerprofilesctl get; \
+    sleep 2; \
+    if [ -f /run/power_profile.state ]; then \
+        powerprofilesctl set $(cat /run/power_profile.state); \
+        rm -f /run/power_profile.state; \
+    fi; \
+    if [ -f /run/singbox.state ] && [ "$(cat /run/singbox.state)" = "1" ]; then \
+        systemctl start sing-box.service; \
+    fi; \
+    rm -f /run/singbox.state'
+
+[Install]
+WantedBy=sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

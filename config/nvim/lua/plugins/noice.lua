@@ -1,6 +1,7 @@
 return {
   "folke/noice.nvim",
   --event = "VeryLazy",
+  priority = 1000,
   lazy = false,
   dependencies = {
     "MunifTanjim/nui.nvim",
@@ -40,6 +41,15 @@ return {
         -- 'cmdline' - классический вид снизу (прямо над lualine)
         -- 'cmdline_popup' - модное окно по центру экрана
         view = "cmdline",
+        format = {
+          -- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
+          -- view: (default is cmdline view)
+          -- opts: any options passed to the view
+          -- icon_hl_group: optional hl_group for the icon
+          -- title: set to anything or empty string to hide
+          search_down = { kind = "search", pattern = "^/", icon = "", lang = "regex" },
+          search_up = { kind = "search", pattern = "^%?", icon = "", lang = "regex" },
+        },
       },
 
       notify = {

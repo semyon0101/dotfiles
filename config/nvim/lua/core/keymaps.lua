@@ -128,6 +128,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+vim.keymap.set("n", "<leader>cc", "gcc", { remap = true, desc = "Comment/Uncomment"})
+vim.keymap.set("v", "<leader>cc", "gc", { remap = true })
+
 vim.keymap.set({ "n", "v" }, "<leader>cl", function()
   vim.lsp.buf.format({
     async = true,
