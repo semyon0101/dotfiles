@@ -1,3 +1,13 @@
+local services = {
+  "pyright", -- Умный LSP для Python (от Microsoft)
+  "clangd",  -- C и C++
+  "gopls",   -- Go
+  "bashls",
+  "ts_ls",   -- JavaScript и TypeScript
+  "lua_ls",  -- Lua (для редактирования самого конфига Neovim)
+  "jsonls"
+}
+
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -12,15 +22,7 @@ return {
 
     -- 2. Говорим Mason, какие серверы нужно скачать
     require("mason-lspconfig").setup({
-      ensure_installed = {
-        "pyright", -- Умный LSP для Python (от Microsoft)
-        "clangd",  -- C и C++
-        "gopls",   -- Go
-        "bashls",
-        "ts_ls",   -- JavaScript и TypeScript
-        "lua_ls",  -- Lua (для редактирования самого конфига Neovim)
-        "jsonls"
-      },
+      ensure_installed = services,
     })
 
     vim.diagnostic.config({
@@ -32,31 +34,25 @@ return {
     })
 
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    for _, server in ipairs(services) do
+      -- Базовые опции, которые нужны каждому серверу
+      local opts = {
+        capabilities = capabilities,
+      }
 
-    vim.lsp.config("pyright", { capabilities = capabilities })
-    vim.lsp.enable("pyright")
+      -- Специфичные настройки: переопределение opts для конкретных серверов
+      if server == "lua_ls" then
+        opts.settings = {
+          Lua = {
+            diagnostics = { globals = { "vim" } },
+          },
+        }
+      end
 
-    vim.lsp.config("clangd", { capabilities = capabilities })
-    vim.lsp.enable("clangd")
-
-    vim.lsp.config("gopls", { capabilities = capabilities })
-    vim.lsp.enable("gopls")
-
-    vim.lsp.config("bashls", { capabilities = capabilities })
-    vim.lsp.enable("bashls")
-
-    vim.lsp.config("ts_ls", { capabilities = capabilities })
-    vim.lsp.enable("ts_ls")
-
-    vim.lsp.config("lua_ls", {
-      capabilities = capabilities,
-      settings = {
-        Lua = {
-          diagnostics = { globals = { "vim" } },
-        },
-      },
-    })
-    vim.lsp.enable("lua_ls")
+      -- Инициализация сервера
+      vim.lsp.config(server, opts)
+      vim.lsp.enable(server)
+    end
 
     local on_attach = function(client, _)
       -- Отключение семантических токенов для конкретного клиента
@@ -80,7 +76,5 @@ return {
     --})
 
     --vim.lsp.enable("qml-language-server")
-
-    vim.lsp.enable("lua_ls")
   end,
 }
