@@ -30,3 +30,20 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt.softtabstop = 4
   end,
 })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("SetCwdOnStartup", { clear = true }),
+  callback = function()
+    local filepath = vim.api.nvim_buf_get_name(0)
+
+    if filepath ~= "" and vim.fn.isdirectory(filepath) == 0 then
+      if vim.bo.buftype == "" then
+        local dir = vim.fn.fnamemodify(filepath, ":p:h")
+
+        if vim.fn.isdirectory(dir) == 1 then
+          vim.api.nvim_set_current_dir(dir)
+        end
+      end
+    end
+  end,
+})
