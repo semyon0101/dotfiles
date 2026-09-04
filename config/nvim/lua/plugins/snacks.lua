@@ -1,14 +1,14 @@
 return {
-  "folke/snacks.nvim",
-  priority = 1000,
-  lazy = false,
-  opts = {
-    indent = {
-      enabled = true,
-      char = "│",
-      scope = {
-        enabled = true, -- Подсветка линии текущего блока
-      },
-    },
-  },
+	"folke/snacks.nvim",
+	priority = 1000,
+	lazy = false,
+	opts = {
+		indent = {
+			enabled = true,
+			char = "│",
+			scope = {
+				enabled = true, -- Подсветка линии текущего блока
+			},
+		},
+	},
 }

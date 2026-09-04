@@ -10,26 +10,27 @@ local ru_shift = [[ËЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТ�
 local en = [[`qwertyuiop[]asdfghjkl;'zxcvbnm]]
 local ru = [[ёйцукенгшщзхъфывапролджэячсмить]]
 local en_full = [[~QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>?`qwertyuiop[]asdfghjkl;'zxcvbnm,./]]
-local ru_full = [[ËЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,ёйцукенгшщзхъфывапролджэячсмитьбю.]]
+local ru_full =
+[[ËЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,ёйцукенгшщзхъфывапролджэячсмитьбю.]]
 
 -- 1. Настройка встроенного langmap (для d, y, w, f и т.д.)
 vim.opt.langmap = vim.fn.join({
-  escape(ru_shift) .. ';' .. escape(en_shift),
-  escape(ru) .. ';' .. escape(en),
-}, ',')
+  escape(ru_shift) .. ";" .. escape(en_shift),
+  escape(ru) .. ";" .. escape(en),
+}, ",")
 
 -- 2. Перевод комбинаций Ctrl+ через встроенный nvim_feedkeys
 local function map_translated_ctrls()
-  local en_list = vim.split(en_full:gsub('%u', ''), '')
-  local modes = { 'n', 'o', 'i', 'c', 't', 'v' }
+  local en_list = vim.split(en_full:gsub("%u", ""), "")
+  local modes = { "n", "o", "i", "c", "t", "v" }
   for _, char in ipairs(en_list) do
-    local keycode = '<C-' .. char .. '>'
+    local keycode = "<C-" .. char .. ">"
     local tr_char = vim.fn.tr(char, en_full, ru_full)
-    local tr_keycode = '<C-' .. tr_char .. '>'
+    local tr_keycode = "<C-" .. tr_char .. ">"
     if not en_full:find(tr_char, 1, true) then
       local term_keycodes = vim.api.nvim_replace_termcodes(keycode, true, true, true)
       vim.keymap.set(modes, tr_keycode, function()
-        vim.api.nvim_feedkeys(term_keycodes, 'm', true)
+        vim.api.nvim_feedkeys(term_keycodes, "m", true)
       end, { desc = "which_key_ignore" })
     end
   end
@@ -38,7 +39,9 @@ map_translated_ctrls()
 
 -- 3. Функция разбора и перевода сложных комбинаций
 local function translate_keycode(lhs)
-  if type(lhs) ~= "string" then return lhs end
+  if type(lhs) ~= "string" then
+    return lhs
+  end
   local res, i = "", 1
   while i <= #lhs do
     local c = lhs:sub(i, i)
@@ -69,7 +72,7 @@ local function translate_keycode(lhs)
 end
 
 -- 4. Перехват API Neovim для глобальных и локальных маппингов (вкл. плагины)
-local disable_modes = { 'i', 'c', 't' }
+local disable_modes = { "i", "c", "t" }
 
 local original_set_keymap = vim.api.nvim_set_keymap
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -99,18 +102,22 @@ vim.api.nvim_buf_set_keymap = function(bufnr, mode, lhs, rhs, opts)
   end
 end
 
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP hotkeys',
+vim.api.nvim_create_autocmd("LspAttach", {
+  desc = "LSP hotkeys",
   callback = function(event)
-    local ts = require('telescope.builtin')
+    local ts = require("telescope.builtin")
 
-    vim.keymap.set('n', '<leader>ch', vim.lsp.buf.hover, { buffer = event.buf, desc = "hover" })
-    vim.keymap.set('n', '<leader>cd', ts.lsp_definitions, { buffer = event.buf, desc = "definition" })
-    vim.keymap.set('n', '<leader>cf', ts.lsp_references, { buffer = event.buf, desc = "references" })
-    vim.keymap.set('n', "<leader>ci", ts.lsp_implementations, { buffer = event.buf, desc = "implementations" })
-    vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, { buffer = event.buf, desc = "rename" })
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = event.buf, desc = "code action" })
+    vim.keymap.set("n", "<leader>ch", function()
+      vim.lsp.buf.hover({
+        focus = true,
+        focus_id = "lsp_hover",
+      })
+    end, { buffer = event.buf, desc = "hover" })
+    vim.keymap.set("n", "<leader>cd", ts.lsp_definitions, { buffer = event.buf, desc = "definition" })
+    vim.keymap.set("n", "<leader>cf", ts.lsp_references, { buffer = event.buf, desc = "references" })
+    vim.keymap.set("n", "<leader>ci", ts.lsp_implementations, { buffer = event.buf, desc = "implementations" })
+    vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = event.buf, desc = "rename" })
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = event.buf, desc = "code action" })
     vim.keymap.set("n", "<leader>ce", vim.diagnostic.open_float, { desc = "Open diagnostic" })
 
     -- Прыжок к следующей ошибке
@@ -130,6 +137,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 vim.keymap.set("n", "<leader>cc", "gcc", { remap = true, desc = "Comment/Uncomment" })
 vim.keymap.set("v", "<leader>cc", "gc", { remap = true })
+
+vim.keymap.set("v", "<Tab>", ">gv", {})
+
+vim.keymap.set("v", "<S-Tab>", "<gv", {})
 
 vim.keymap.set({ "n", "v" }, "<leader>cl", function()
   require("conform").format({
@@ -170,22 +181,25 @@ vim.keymap.set({ "n", "v" }, "<leader>D", "D", { desc = "Delete line and copy to
 vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "File explorer" })
 
 -- === ТЕЛЕСКОП (ПОИСК) ===
-vim.keymap.set('n', '<leader>ff', function()
-  require('telescope.builtin').find_files()
+vim.keymap.set("n", "<leader>ff", function()
+  require("telescope.builtin").find_files()
 end, { desc = "Find file" })
 
-vim.keymap.set('n', '<leader>fg', function()
-  require('telescope.builtin').live_grep()
+vim.keymap.set("n", "<leader>fg", function()
+  require("telescope.builtin").live_grep()
 end, { desc = "Grep text" })
 
-vim.keymap.set('n', '<leader>fb', function()
-  require('telescope.builtin').buffers()
+vim.keymap.set("n", "<leader>fb", function()
+  require("telescope.builtin").buffers()
 end, { desc = "Buffers" })
 
-vim.keymap.set('n', '<leader>fh', function()
-  require('telescope.builtin').help_tags()
+vim.keymap.set("n", "<leader>fh", function()
+  require("telescope.builtin").help_tags()
 end, { desc = "Help tags" })
 
+vim.keymap.set("n", "<leader>fp", function()
+  vim.notify(vim.api.nvim_buf_get_name(0))
+end, { desc = "PWD file" })
 -- Windows
 -- 1. Навигация между окнами (Ctrl + h/j/k/l вместо Ctrl+w -> h/j/k/l)
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to right window" })
@@ -201,10 +215,6 @@ vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close window" })
 
 vim.keymap.set("n", "<leader>w", "<cmd>bdelete<cr>", { desc = "Close window" })
 
-
-
-
-
 -- Навигация по вкладкам (буферам)
 vim.keymap.set("n", "<A-j>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Previous tab" })
 vim.keymap.set("n", "<A-k>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next tab" })
@@ -216,7 +226,6 @@ vim.keymap.set("n", "<A-K>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move tab b
 vim.keymap.set("n", "<leader>sw", function()
   require("bufdelete").bufdelete(0, true)
 end, { desc = "Close tab" })
-
 
 -- Выделение всего содержимого файла
 vim.keymap.set("n", "<leader>va", function()
@@ -231,7 +240,7 @@ vim.keymap.set("n", "<leader>va", function()
   vim.cmd("normal! o")
 end, { desc = "Select all file" })
 
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- For cmp binds
 local M = {}
@@ -256,7 +265,6 @@ M.nvim_tree_on_attach = function(bufnr)
     return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
   end
 
-
   -- Загружаем стандартные бинды
   -- api.map.on_attach.default(bufnr)
 
@@ -264,7 +272,7 @@ M.nvim_tree_on_attach = function(bufnr)
   vim.keymap.set("n", "c", api.node.navigate.parent_close, opts("Close Directory"))
   vim.keymap.set("n", "v", api.node.open.vertical, opts("Open: Vertical Split"))
   vim.keymap.set("n", "h", api.node.open.horizontal, opts("Open: Horizontal Split"))
-  vim.keymap.set("n", "r", api.fs.rename, opts("Rename"))
+  vim.keymap.set("n", "r", api.fs.rename_full, opts("Rename"))
   vim.keymap.set("n", "a", api.fs.create, opts("Create"))
   vim.keymap.set("n", "d", api.fs.remove, opts("Delete"))
   vim.keymap.set("n", "i", api.node.show_info_popup, opts("Show info"))

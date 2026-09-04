@@ -4,17 +4,41 @@ return {
   config = function()
     require("conform").setup({
       formatters_by_ft = {
+        -- Existing configurations...
         lua = { "stylua" },
         python = { "isort", "black" },
         javascript = { "prettier" },
         typescript = { "prettier" },
-        sh = { "shfmt" }, -- Решает вашу проблему с bash
+        sh = { "shfmt" },
         bash = { "shfmt" },
+        kdl = { "kdlfmt" },
+
+        -- Additions for new domains:
+        c = { "clang-format" },
+        cpp = { "clang-format" },
+        go = { "gofmt" },
+        rust = { "rustfmt" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        html = { "prettier" },
+        css = { "prettier" },
+        markdown = { "prettier" },
+        cmake = { "cmakefmt" },
+
       },
-      format_on_save = {
-        lsp_fallback = true,
-        async = false,
-        timeout_ms = 500,
+      formatters = {
+        kdlfmt = {
+          command = "kdlfmt",
+          args = {
+            "format",
+            "--config",
+            "/home/semyon/.config/kdlfmt.kdl",
+            "--stdin",
+          },
+        },
+        rustfmt = {
+          args = { "+nightly", "--emit", "stdout" },
+        },
       },
     })
   end,
