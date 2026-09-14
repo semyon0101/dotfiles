@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DELAY=10800
+LOCK_FILE="/run/poweroff_scheduled_rtc"
+
+case "$1" in
+  pre)
+    TARGET_TIME=$(($(date +%s) + DELAY))
+    echo "$TARGET_TIME" > "$LOCK_FILE"
+    rtcwake -m disable 2>/dev/null
+    rtcwake -m no -t "$TARGET_TIME"
+    ;;
+  post)
+    if [ -f "$LOCK_FILE" ]; then
+      SCHEDULED_TIME=$(cat "$LOCK_FILE")
+      rm -f "$LOCK_FILE"
+      CURRENT_TIME=$(date +%s)
+
+      # If woken by RTC timer (within margin of error)
+      if [ "$CURRENT_TIME" -ge "$((SCHEDULED_TIME - 2))" ]; then
+        # Now we are outside suspend transaction, poweroff will succeed cleanly
+        systemctl poweroff
+      fi
+    fi
+    ;;
+esac

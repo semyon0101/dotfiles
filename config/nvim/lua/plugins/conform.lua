@@ -6,7 +6,7 @@ return {
       formatters_by_ft = {
         -- Existing configurations...
         lua = { "stylua" },
-        python = { "isort", "black" },
+        python = { "ruff_organize_imports", "ruff_format" },
         javascript = { "prettier" },
         typescript = { "prettier" },
         sh = { "shfmt" },
@@ -38,6 +38,9 @@ return {
         },
         rustfmt = {
           args = { "+nightly", "--emit", "stdout" },
+        },
+        ruff_format = {
+          prepend_args = { "--config", "indent-width=2" },
         },
       },
     })

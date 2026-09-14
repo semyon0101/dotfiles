@@ -1,0 +1,13 @@
+[Unit]
+Description=Suspend then Poweroff RTC Handler
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/suspend-then-poweroff pre
+ExecStop=/usr/local/bin/suspend-then-poweroff post
+
+[Install]
+WantedBy=sleep.target
