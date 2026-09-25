@@ -1,0 +1,55 @@
+[
+  {
+    "sources": [
+      "/work/dotfiles/bin/crsl",
+      "/work/dotfiles/bin/cam-run.sh",
+      "/work/dotfiles/bin/patch_agy.py",
+      "/work/dotfiles/bin/sub2yaml.py"
+    ],
+    "targets": ["/usr/local/bin/"]
+  },
+  {
+    "sources": [
+      "/work/dotfiles/systemd/user/mihomo-sleep.service",
+      "/work/dotfiles/systemd/user/mihomo-party-autostart.service"
+    ],
+    "targets": ["/home/semyon/.local/share/systemd/user/"]
+  },
+  {
+    "sources": [
+      "/work/dotfiles/systemd/system/sleep-issue.service",
+      "/work/dotfiles/systemd/system/powerprofile-wakeup.service",
+      "/work/dotfiles/systemd/system/suspend-then-poweroff.service"
+    ],
+    "targets": ["/usr/local/lib/systemd/system/"]
+  },
+  {
+    "sources": [
+      "/work/dotfiles/config/.zshrc",
+      "/work/dotfiles/config/.p10k.zsh"
+    ],
+    "targets": ["/root/", "/home/semyon"]
+  },
+  {
+    "sources": [
+      "/work/dotfiles/config/.editorconfig",
+      "/work/dotfiles/config/niri/",
+      "/work/dotfiles/config/nvim/",
+      "/work/dotfiles/config/kitty",
+      "/work/dotfiles/config/oh-my-posh/"
+    ],
+    "targets": ["/root/.config", "/home/semyon/.config/"]
+  },
+  {
+    "sources": ["/home/semyon/.local/share/nvim"],
+    "targets": ["/root/.local/share"]
+  },
+  {
+    "sources": ["/work/kirisimlink/target/release/kirisimlink"],
+    "targets": ["/usr/local/bin"]
+  },
+  {
+    "sources": ["/work/dotfiles/config/kirisimlink"],
+    "targets": ["/etc"]
+  }
+]

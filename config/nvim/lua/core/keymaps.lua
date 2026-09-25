@@ -240,7 +240,15 @@ vim.keymap.set("n", "<leader>va", function()
   vim.cmd("normal! o")
 end, { desc = "Select all file" })
 
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+vim.keymap.set("n", "<C-CR>", "<Cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
+
+vim.keymap.set("n", "<C-S-CR>", function ()
+  vim.cmd("enew")
+  vim.cmd("terminal")
+  vim.cmd("startinsert")
+end, { desc = "Open terminal as buffer" })
 
 -- For cmp binds
 local M = {}

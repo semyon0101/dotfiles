@@ -1,0 +1,13 @@
+[Unit]
+Description=Manage Mihomo TUN on Sleep/Resume
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/mihomo-sleep.sh stop
+ExecStop=/usr/local/bin/mihomo-sleep.sh start
+
+[Install]
+WantedBy=sleep.target

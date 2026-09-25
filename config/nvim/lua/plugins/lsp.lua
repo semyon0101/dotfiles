@@ -10,27 +10,27 @@ local services = {
   "rust_analyzer",
 
   -- Configuration files & Serialization
-  "yamlls",  -- YAML (CI/CD, Kubernetes, compose files)
-  "taplo",   -- TOML (Cargo.toml, pyproject.toml, app configs)
-  "lemminx", -- XML
+  "yamlls",    -- YAML (CI/CD, Kubernetes, compose files)
+  "taplo",     -- TOML (Cargo.toml, pyproject.toml, app configs)
+  "lemminx",   -- XML
   "neocmake",
 
   -- Build systems & Linux development
-  "mesonlsp",                        -- Meson build definition files
-  "autotools_ls",                    -- Makefiles, configure scripts, autoconf
-  "dockerls",                        -- Dockerfile
-  "docker_compose_language_service", -- docker-compose.yaml
+  "mesonlsp",                          -- Meson build definition files
+  "autotools_ls",                      -- Makefiles, configure scripts, autoconf
+  "dockerls",                          -- Dockerfile
+  "docker_compose_language_service",   -- docker-compose.yaml
 
   -- Web development
-  "html",                  -- HTML
-  "cssls",                 -- CSS / SCSS / LESS
-  "tailwindcss",           -- Tailwind CSS utilities and preview
-  "emmet_language_server", -- Emmet abbreviation expansion
+  "html",                    -- HTML
+  "cssls",                   -- CSS / SCSS / LESS
+  "tailwindcss",             -- Tailwind CSS utilities and preview
+  "emmet_language_server",   -- Emmet abbreviation expansion
 
   -- Documentation, Data & Scripting
-  "marksman", -- Markdown notes and cross-file reference linking
-  "sqlls",    -- SQL queries and schemas
-  "awk_ls",   -- AWK scripts
+  "marksman",   -- Markdown notes and cross-file reference linking
+  "sqlls",      -- SQL queries and schemas
+  "awk_ls",     -- AWK scripts
 }
 
 return {
@@ -39,7 +39,7 @@ return {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "hrsh7th/cmp-nvim-lsp",
-    "b0o/SchemaStore.nvim", -- Provides JSON/YAML schemas
+    "b0o/SchemaStore.nvim",     -- Provides JSON/YAML schemas
   },
   config = function()
     -- 1. Инициализируем Mason

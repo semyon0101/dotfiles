@@ -1,0 +1,15 @@
+[Unit]
+Description=Mihomo Party Client
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+# Ждем именно появления зарегистрированного хоста от dms
+ExecStartPre=/usr/bin/bash -c 'until qdbus org.kde.StatusNotifierWatcher /StatusNotifierWatcher org.kde.StatusNotifierWatcher.IsStatusNotifierHostRegistered 2>/dev/null | grep -q "true"; do sleep 0.5; done'
+ExecStart=/usr/bin/mihomo-party
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target

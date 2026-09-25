@@ -1,0 +1,83 @@
+# Top-most EditorConfig file
+root = true
+
+# Global defaults: 2 spaces, UTF-8, Unix line endings, trim whitespace
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ==============================================================================
+# 4 SPACES INDENTATION
+# ==============================================================================
+
+# Python
+[*.{py,pyi}]
+indent_size = 4
+
+# Rust
+[*.rs]
+indent_size = 4
+
+# Qt Modeling Language
+[*.{qml,qmljs}]
+indent_size = 4
+
+# JVM Ecosystem
+[*.{java,kt,kts,groovy,gradle}]
+indent_size = 4
+
+# .NET Ecosystem
+[*.{cs,csx,fs,fsx,vb}]
+indent_size = 4
+
+# PHP
+[*.{php,phtml}]
+indent_size = 4
+
+# Apple Ecosystem
+[*.swift]
+indent_size = 4
+
+# Scripting & Scientific
+[*.{pl,pm,m}]
+indent_size = 4
+
+# ==============================================================================
+# HARD TABS (\t)
+# ==============================================================================
+
+# Go (Strict requirement by gofmt)
+[*.go]
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# Makefiles (Strict syntax requirement by GNU make)
+[{Makefile,makefile,GNUmakefile,*.mk}]
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# Tab-Separated Values
+[*.tsv]
+indent_style = tab
+
+# Git internals
+[{.gitmodules,gitconfig}]
+indent_style = tab
+
+# ==============================================================================
+# EXCEPTIONS & OVERRIDES
+# ==============================================================================
+
+# Markdown: Two trailing spaces represent a hard line break (<br>)
+[*.{md,markdown}]
+trim_trailing_whitespace = false
+
+# Patch/Diff files: preserve exact character buffers
+[*.{diff,patch}]
+trim_trailing_whitespace = false

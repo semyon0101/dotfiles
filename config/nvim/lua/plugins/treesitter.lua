@@ -1,20 +1,21 @@
 return {
-  "nvim-treesitter/nvim-treesitter",
-  branch = "master", -- Явно указываем проверенную ветку!
-  build = ":TSUpdate",
-  config = function()
-    require("nvim-treesitter.configs").setup({
-      ensure_installed = { "c", "go", "bash", "lua", "vim", "markdown" },
+    "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    build = ":TSUpdate",
+    config = function()
+        -- Установка нужных парсеров
+        local ts = require("nvim-treesitter")
+        ts.setup({
+            -- базовые опции ветки main (если нужны)
+        })
 
-      -- === ДОБАВЛЕННЫЕ ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ===
-      sync_install = false, -- Устанавливать парсеры синхронно (блокируя UI)? Обычно false
-      auto_install = true, -- Автоматически устанавливать парсер, если открыт файл неизвестного типа
-      ignore_install = {},  -- Список парсеров, которые НЕ нужно устанавливать
-      modules = {},         -- Пустая таблица для дополнительных модулей
+        -- Автоустановка парсеров в ветке main
+        local ensure_installed = { "c", "go", "bash", "lua", "vim", "markdown" }
 
-      highlight = {
-        enable = true,
-      },
-    })
-  end,
+        for _, parser in ipairs(ensure_installed) do
+            if not vim.treesitter.language.add(parser) then
+                vim.cmd("TSInstall " .. parser)
+            end
+        end
+    end,
 }

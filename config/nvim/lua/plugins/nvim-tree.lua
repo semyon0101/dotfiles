@@ -6,6 +6,10 @@ return {
 
     require("nvim-tree").setup({
       on_attach = my_keymaps.nvim_tree_on_attach, -- Подключаем наши бинды
+      filters = {
+        dotfiles = false,
+        git_ignored = false,
+      },
       view = {
         width = 30,
         side = "left",

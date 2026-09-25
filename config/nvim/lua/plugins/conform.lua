@@ -32,15 +32,12 @@ return {
           args = {
             "format",
             "--config",
-            "/home/semyon/.config/kdlfmt.kdl",
+            vim.fn.expand("~/.config/kdlfmt.kdl"),
             "--stdin",
           },
         },
-        rustfmt = {
-          args = { "+nightly", "--emit", "stdout" },
-        },
-        ruff_format = {
-          prepend_args = { "--config", "indent-width=2" },
+        ["clang-format"] = {
+          prepend_args = { "-style={BasedOnStyle: LLVM, IndentWidth: 2, TabWidth: 2, UseTab: Never}" },
         },
       },
     })
