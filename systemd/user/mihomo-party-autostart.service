@@ -11,5 +11,9 @@ ExecStart=/usr/bin/mihomo-party
 Restart=on-failure
 RestartSec=5
 
+; ExecStartPost=/usr/bin/bash -c '/usr/bin/ip rule show pref 8999 | grep -q 8999 || /usr/bin/ip rule add to 198.18.0.0/16 lookup 2022 pref 8999'
+; ExecStopPost=-/usr/bin/ip rule del pref 8999
+
+
 [Install]
 WantedBy=graphical-session.target

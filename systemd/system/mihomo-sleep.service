@@ -6,8 +6,7 @@ StopWhenUnneeded=yes
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/mihomo-sleep.sh stop
-ExecStop=/usr/local/bin/mihomo-sleep.sh start
+ExecStop=/usr/local/bin/mihomo-sleep.sh 
 
 [Install]
 WantedBy=sleep.target
