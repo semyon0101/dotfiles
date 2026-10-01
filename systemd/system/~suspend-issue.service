@@ -1,0 +1,13 @@
+[Unit]
+Description=Suspend Handler to solver issue with sleep
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStop=/usr/local/bin/suspend-issue.sh post
+ExecStart=/usr/local/bin/suspend-issue.sh pre
+
+[Install]
+WantedBy=sleep.target

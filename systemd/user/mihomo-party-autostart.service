@@ -5,15 +5,9 @@ After=graphical-session.target
 
 [Service]
 Type=simple
-# Ждем именно появления зарегистрированного хоста от dms
-ExecStartPre=/usr/bin/bash -c 'until qdbus org.kde.StatusNotifierWatcher /StatusNotifierWatcher org.kde.StatusNotifierWatcher.IsStatusNotifierHostRegistered 2>/dev/null | grep -q "true"; do sleep 0.5; done'
-ExecStart=/usr/bin/mihomo-party
+ExecStart=%h/.local/bin/run-mihomo-party.sh
 Restart=on-failure
 RestartSec=5
-
-; ExecStartPost=/usr/bin/bash -c '/usr/bin/ip rule show pref 8999 | grep -q 8999 || /usr/bin/ip rule add to 198.18.0.0/16 lookup 2022 pref 8999'
-; ExecStopPost=-/usr/bin/ip rule del pref 8999
-
 
 [Install]
 WantedBy=graphical-session.target

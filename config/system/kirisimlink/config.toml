@@ -4,12 +4,12 @@
 
 [[mappings]]
 # Release binary for symlink manager
-sources = ["/work/kirisimlink/target/release/kirisimlink"]
+sources = ["/work/system/kirisimlink/target/release/kirisimlink"]
 targets = ["/usr/local/bin"]
 
 [[mappings]]
 # System configuration for symlink manager
-sources = ["/work/dotfiles/config/kirisimlink"]
+sources = ["/work/dotfiles/config/system/kirisimlink"]
 targets = ["/etc"]
 
 # ==============================================================================
@@ -30,18 +30,21 @@ targets = ["/home/semyon/.local/share/systemd/user"]
 # CLI Utilities & Binaries
 # ==============================================================================
 
-[[mappings]]
 # General executable helper scripts
-sources = ["/work/dotfiles/bin/crsl", "/work/dotfiles/bin/mihomo-sleep.sh"]
+[[mappings]]
+sources = [
+  # "/work/dotfiles/bin/system/crsl",
+  "/work/dotfiles/bin/system/suspend-issue.sh",
+]
 targets = ["/usr/local/bin/"]
 
-[[mappings]]
 # General executable helper scripts
+[[mappings]]
 sources = [
-  "/work/dotfiles/bin/cam-run.sh",
-  "/work/dotfiles/bin/patch_agy.py",
-  "/work/dotfiles/bin/sub2yaml.py",
-  # "/work/dotfiles/bin/mihomo-sleep.sh",
+  "/work/dotfiles/bin/user/cam-run.sh",
+  "/work/dotfiles/bin/user/patch_agy.py",
+  "/work/dotfiles/bin/user/sub2yaml.py",
+  "/work/dotfiles/bin/user/run-mihomo-party.sh",
 ]
 targets = ["/home/semyon/.local/bin/"]
 
@@ -49,23 +52,23 @@ targets = ["/home/semyon/.local/bin/"]
 # Shell & Environment
 # ==============================================================================
 
-[[mappings]]
 # Zsh configurations synchronized across root and user
-sources = ["/work/dotfiles/config/.zshrc", "/work/dotfiles/config/.p10k.zsh"]
+[[mappings]]
+sources = ["/work/dotfiles/config/user/.zshrc", "/work/dotfiles/config/user/.p10k.zsh"]
 targets = ["/root/", "/home/semyon"]
 
 # ==============================================================================
 # Desktop & Application Configurations
 # ==============================================================================
 
-[[mappings]]
 # Shared dotfiles configs for user and root
+[[mappings]]
 sources = [
-  "/work/dotfiles/config/.editorconfig",
-  "/work/dotfiles/config/niri/",
-  "/work/dotfiles/config/nvim/",
-  "/work/dotfiles/config/kitty",
-  "/work/dotfiles/config/oh-my-posh/",
+  "/work/dotfiles/config/user/.editorconfig",
+  "/work/dotfiles/config/user/niri/",
+  "/work/dotfiles/config/user/nvim/",
+  "/work/dotfiles/config/user/kitty",
+  "/work/dotfiles/config/user/oh-my-posh/",
 ]
 targets = ["/root/.config", "/home/semyon/.config/"]
 
@@ -74,20 +77,18 @@ targets = ["/root/.config", "/home/semyon/.config/"]
 # Systemd Services
 # ==============================================================================
 
-[[mappings]]
 # User session units (networking and autostart)
+[[mappings]]
 sources = [
-  # "/work/dotfiles/systemd/user/mihomo-sleep.service",
   "/work/dotfiles/systemd/user/mihomo-party-autostart.service",
 ]
 targets = ["/home/semyon/.local/share/systemd/user/"]
 
-[[mappings]]
 # System-wide power management and sleep hooks
+[[mappings]]
 sources = [
   "/work/dotfiles/systemd/system/powerprofile-wakeup.service",
-  "/work/dotfiles/systemd/system/suspend-then-poweroff.service",
-  "/work/dotfiles/systemd/system/mihomo-sleep.service",
+  "/work/dotfiles/systemd/system/suspend-issue.service",
 ]
 targets = ["/usr/local/lib/systemd/system/"]
 
@@ -95,7 +96,8 @@ targets = ["/usr/local/lib/systemd/system/"]
 # Link to /root/.local
 # ==============================================================================
 
-[[mappings]]
 # Shared Neovim data and plugins cache
+[[mappings]]
 sources = ["/home/semyon/.local/share/nvim"]
 targets = ["/root/.local/share"]
+
